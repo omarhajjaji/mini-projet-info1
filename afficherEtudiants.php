@@ -102,7 +102,7 @@
 		out +="</table>";
 		document.getElementById("demo").innerHTML=out;
        }
-       else document.getElementById("demo").innerHTML="Aucune Inscriptions!";
+       else document.getElementById("demo").innerHTML="Aucune Inscription!";
 
     }
 }
