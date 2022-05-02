@@ -21,7 +21,7 @@ if($pwd != $cpwd){
 }
 
 
-include("connexion.php");
+include("../connexion.php");
          $sel=$pdo->prepare("select cin from etudiant where cin=? limit 1");
          $sel->execute(array($cin));
          $tab=$sel->fetchAll();

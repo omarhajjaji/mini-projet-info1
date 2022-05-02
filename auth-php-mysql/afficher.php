@@ -5,7 +5,7 @@
 	exit();
  }
 else {
-include("connexion.php");
+include("../connexion.php");
 $req="SELECT * FROM etudiant";
 $reponse = $pdo->query($req);
 if($reponse->rowCount()>0) {
