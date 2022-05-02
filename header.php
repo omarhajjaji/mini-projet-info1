@@ -14,7 +14,7 @@
         <a class="nav-link dropdown-toggle" href="index.php" id="dropdown01" data-toggle="dropdown" aria-expanded="false">Gestion des Groupes</a>        <div class="dropdown-menu" aria-labelledby="dropdown01">
           <a class="dropdown-item" href="afficherEtudiants.php">Lister tous les étudiants</a>
           <a class="dropdown-item" href="afficherEtudiantsParClasse.html">Etudiants par Groupe</a>
-          <a class="dropdown-item" href="#">Ajouter Groupe</a>
+          <a class="dropdown-item" href="AjouterGroupe.php">Ajouter Groupe</a>
           <a class="dropdown-item" href="#">Modifier Groupe</a>
           <a class="dropdown-item" href="#">Supprimer Groupe</a>
 
