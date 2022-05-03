@@ -2,8 +2,8 @@
 
 include("connexion.php");
 $erreur ="";
+//Pour avoir la liste (select) des groupes dans la base
 $list_etd="<option value=\"\">Pas de groupes</option>";
-
 $req="SELECT code FROM groupe";
 $reponse = $pdo->query($req);
 if($reponse->rowCount()>0) {
@@ -11,13 +11,9 @@ if($reponse->rowCount()>0) {
   $list_etd="";
 while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
          $code= $row["code"];
-         $list_etd.="<option value=\"$code\">$code</option>";
+         $list_etd.="<option value=\"$code\">$code</option>"; // stocker les options dans la variable list_etd
     }
 }
-
-  
-
-
 
 ?>
 

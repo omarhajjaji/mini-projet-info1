@@ -22,10 +22,9 @@ include("connexion.php");
             }else{
               $erreur ="<p style=\"color:red\">Pas de groupe avec ce code</p>";
             }
-         echo $erreur;
+
 }catch(PDOException $e){
   $erreur = "<p style=\"color:red\">Un probleme est survenu</p>";
-    echo $erreur;
 }
 
   

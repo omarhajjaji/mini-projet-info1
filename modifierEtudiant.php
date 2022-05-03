@@ -15,6 +15,41 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
     }
 }
 
+//Modification des données de l'utilisateur
+if(isset($_POST['modifier_etd']))
+{
+$cin=$_POST['cin'];
+$nom=$_POST['nom'];
+$prenom=$_POST['prenom'];
+$email=$_POST['email'];
+$adresse=$_POST['adresse'];
+$pwd=md5($_POST['pwd']);
+$cpwd=md5($_POST['cpwd']);
+$classe=$_POST['classe'];
+
+if($pwd != $cpwd){
+   $erreur ="<p style=\"color:red\">Mot de passe n'est pas identique</p>";
+   goto fin;
+}
+  
+try{
+            $sel=$pdo->prepare("update etudiant set nom=? , prenom=? , email=? , adresse=? , password=? 
+            , cpassword=? , classe=? where cin=?");
+            $sel->execute(array($nom,$prenom,$email,$adresse,$pwd,$cpwd,$classe,$cin));
+            if($sel->rowCount()>0){//test si il a trouvé la valeur
+            $erreur ="<p style=\"color:green\">Succcès de modification</p>";
+            }else{
+              $erreur ="<p style=\"color:red\">Pas d'etudiant avec ce code</p>";
+            }
+         
+}catch(PDOException $e){
+  $erreur = "<p style=\"color:red\">Un probleme est survenu $e</p>";
+}
+fin:
+
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +57,7 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCO-ENICAR Ajouter Etudiant</title>
+    <title>SCO-ENICAR Modifier Etudiant</title>
     <!-- Bootstrap core CSS -->
 <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap core JS-JQUERY -->
@@ -39,26 +74,28 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
 <main role="main">
         <div class="jumbotron">
             <div class="container">
-              <h1 class="display-4">Ajouter un étudiant</h1>
-              <p>Remplir le formulaire ci-dessous afin d'ajouter un étudiant!</p>
+              <h1 class="display-4">Modifier un étudiant</h1>
+              <p>Saisir le numero de CIN pour trouver l'etudiant ensuite le modifier!</p>
             </div>
           </div>
 
 
 <div class="container">
- <form id="myForm" method="POST">
-     <!--
-                        TODO: Add form inputs
-                        Prenom - required string with autofocus
-                        Nom - required string
-                        Email - required email address
-                        CIN - 8 chiffres
-                        Password - required password string, au moins 8 letters et chiffres
-                        ConfirmPassword
-                        Classe - Commence par la chaine INFO, un chiffre de 1 a 3, un - et une lettre MAJ de A à E
-                        Adresse - required string
-                    -->
-     <!--Nom-->
+    <!--Recherche-->
+ <form id="formCherch" method="GET">
+     <!--CIN-->
+     <div class="form-group">
+    <div id="err"><?php echo $erreur; ?></div>
+     <label for="cin">CIN:</label><br>
+     <input type="text" id="cinCher" name="cin"  class="form-control" required pattern="[0-9]{8}" title="8 chiffres"/>
+    </div>
+     <!--Bouton Chercher-->
+     <button  type="button" onclick="chercher()" class="btn btn-primary btn-block">Chercher</button>
+     <div id="error"></div>
+ </form> 
+ <br>
+ <!--Modification-->
+  <form id="formMod" method="POST" action="" hidden>
      <div class="form-group">
      <label for="nom">Nom:</label><br>
      <input type="text" id="nom" name="nom" class="form-control" required autofocus>
@@ -73,8 +110,8 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" class="form-control" required>
        </div>
-     <!--CIN-->
-     <div class="form-group">
+    <!--CIN-->
+     <div class="form-group" hidden>
      <label for="cin">CIN:</label><br>
      <input type="text" id="cin" name="cin"  class="form-control" required pattern="[0-9]{8}" title="8 chiffres"/>
     </div>
@@ -107,11 +144,7 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
      </input>
     </div>
      <!--Bouton Ajouter-->
-     <div id="demo"></div>
-     <button  type="button" onclick="ajouter()" class="btn btn-primary btn-block">Ajouter</button>
-
-
- </form> 
+     <button  type="submit" name="modifier_etd" class="btn btn-primary btn-block">Modifier</button>
 </div>  
 
 </main>
@@ -121,18 +154,17 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
     <p>&copy; ENICAR 2021-2022</p>
   </footer>
 <script>
-    function ajouter()
+    function chercher()
     {
         
         var xmlhttp = new XMLHttpRequest();
-        var url="http://localhost/MiniProj/mini-projet-info1/auth-php-mysql/ajouter.php";
+        var url="http://localhost/MiniProj/mini-projet-info1/auth-php-mysql/chercherEtd.php";
         
         //Envoie Req
         xmlhttp.open("POST",url,true);
 
-        form=document.getElementById("myForm");
+        form=document.getElementById("formCherch");
         var formdata=new FormData(form);
-        console.log(formdata);
 
         xmlhttp.send(formdata);
         
@@ -142,28 +174,35 @@ while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
         xmlhttp.onreadystatechange=function()
             {   
                 if(this.readyState==4 && this.status==200){
-                // alert(this.responseText);
-                    if(this.responseText=="OK")
-                    {
-                        document.getElementById("demo").innerHTML="L'ajout de l'étudiant a été bien effectué";
-                        document.getElementById("demo").style.backgroundColor="green";
-                        //Rafraichir la page apres l'ajout
-                        setTimeout(() => {
-                            document.location.reload(true);
-                        }, 3000);
-                    }
-                    else
-                    {
-                        console.log(this.responseText);
-                        document.getElementById("demo").innerHTML=this.responseText;
-                        document.getElementById("demo").style.backgroundColor="#fba";
-                    }
+                     //console.log(this.responseText);
+                     myFunction(this.responseText);
+                  
                 }
             }
-        
-        
+
+        function myFunction(response){
+		var obj=JSON.parse(response);
+        if (obj.success==1)
+        {
+		var arr=obj.etudiants;
+        document.getElementById("formMod").removeAttribute("hidden");//afficher le formulaire
+        //remplir le formulaire avec les données de l'etudiant a modier
+        document.getElementById("nom").value=arr[0].nom;
+        document.getElementById("prenom").value=arr[0].prenom;
+        document.getElementById("email").value=arr[0].email;
+        document.getElementById("classe").value=arr[0].classe;
+        document.getElementById("cin").value=arr[0].cin;
+        document.getElementById("adresse").value=arr[0].adresse;
+        document.getElementById("error").innerHTML="Etudiant trouvé! Vous pouvez modifier"
+        document.getElementById("error").style.color="green";
+       }
+       else {document.getElementById("error").innerHTML="Aucune inscription avec ce CIN!";
+            document.getElementById("error").style.color="red";}
+
     }
+}
+        
+        
     </script>
-<!--<script  src="./assets/dist/js/inscrire.js"></script>-->
 </body>
 </html>
