@@ -108,6 +108,7 @@
 
         form=document.getElementById("myForm");
         var formdata=new FormData(form);
+        console.log(formdata);
 
         xmlhttp.send(formdata);
         
@@ -123,9 +124,9 @@
                         document.getElementById("demo").innerHTML="L'ajout de l'étudiant a été bien effectué";
                         document.getElementById("demo").style.backgroundColor="green";
                         //Rafraichir la page apres l'ajout
-                        setTimeout(() => {
+                        /*setTimeout(() => {
                             document.location.reload(true);
-                        }, 3000);
+                        }, 3000);*/
                     }
                     else
                     {

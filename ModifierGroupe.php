@@ -1,9 +1,8 @@
 <?php
-//Connexion à la base
 
+$erreur ="";
 
-  $erreur="";
-if(isset($_POST['ajouter_grp']))
+if(isset($_POST['modifier_grp']))
 {
   $code= $_POST['code'];
   $niveau= $_POST['niveau'];
@@ -11,19 +10,23 @@ if(isset($_POST['ajouter_grp']))
   $nb_AbsenceJ= $_POST['nb_AbsenceJ'];
   $nb_AbsenceNJ= $_POST['nb_AbsenceNJ'];
   
-  include("connexion.php");
-
-  $sel=$pdo->prepare("select code from groupe where code=? limit 1");
-         $sel->execute(array($code));
-         $tab=$sel->fetchAll();
-         if(count($tab)>0)
-            $erreur="<p style=\"color:red\">Groupe existe deja</p>";// Groupe existe déja
-         else{
-            $req="insert into groupe values ('$code','$niveau','$nb_eleves','$nb_AbsenceJ','$nb_AbsenceNJ')";
-            $reponse = $pdo->exec($req) or die("error");
-            $erreur ="<p style=\"color:green\">Groupe créé avec succès</p>";
-         }  
+  
+try{
+  //Connexion à la base
+include("connexion.php");
+            $sel=$pdo->prepare("update groupe set niveau=? , nb_eleves=? , nb_AbsenceJ=? , nb_AbsenceNJ=?
+                  where code=?");
+            $sel->execute(array($niveau,$nb_eleves,$nb_AbsenceJ,$nb_AbsenceNJ,$code));
+            if($sel->rowCount()>0){//test si il a trouvé la valeur
+            $erreur ="<p style=\"color:green\">Succcès de modification</p>";
+            }else{
+              $erreur ="<p style=\"color:red\">Pas de groupe avec ce code</p>";
+            }
          echo $erreur;
+}catch(PDOException $e){
+  $erreur = "<p style=\"color:red\">Un probleme est survenu</p>";
+    echo $erreur;
+}
 
   
 }
@@ -38,7 +41,7 @@ if(isset($_POST['ajouter_grp']))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCO-ENICAR Ajouter Groupe </title>
+    <title>SCO-ENICAR Modifier Groupe </title>
     <!-- Bootstrap core CSS -->
 <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap core JS-JQUERY -->
@@ -56,8 +59,8 @@ if(isset($_POST['ajouter_grp']))
 <main role="main">
         <div class="jumbotron">
             <div class="container">
-              <h1 class="display-4">Ajouter un Groupe</h1>
-              <p>Remplir le formulaire ci-dessous afin d'ajouter un Grooupe!</p>
+              <h1 class="display-4">Modifier un Groupe</h1>
+              <p>Veuillez bien choisir le code du groupe à modifier!</p>
             </div>
           </div>
 
@@ -76,7 +79,7 @@ if(isset($_POST['ajouter_grp']))
                     -->
      <!--Code-->
      <div class="form-group">
-       <div id="demo"><?php echo $erreur; ?></div>
+    <div id="demo"><?php echo $erreur; ?></div>
      <label for="code">Code:</label><br>
      <input type="text" id="code" name="code" class="form-control" required pattern="INFO[1-3]{1}-[A-E]{1}"
      title="Pattern INFOX-X. Par Exemple: INFO1-A, INFO2-E, INFO3-C">
@@ -101,9 +104,9 @@ if(isset($_POST['ajouter_grp']))
      <label for="nb_AbsenceNJ">Nombre des absences non jusitifiées:</label><br>
      <input type="int" id="nb_AbsenceNJ" name="nb_AbsenceNJ" class="form-control"  required pattern="[0-4]{1}"/>
     </div>
-     
+    
      <!--Bouton Ajouter-->
-     <button  type="submit" class="btn btn-primary btn-block" name=ajouter_grp>Ajouter</button>
+     <button  type="submit" class="btn btn-primary btn-block" name="modifier_grp">Modifier</button>
 
 
  </form> 

@@ -1,4 +1,5 @@
 <?php
+
  session_start();
  if($_SESSION["autoriser"]!="oui"){
 	header("location:login.php");
@@ -6,8 +7,14 @@
  }
 else {
 include("../connexion.php");
-$req="SELECT * FROM etudiant";
+$code=$_REQUEST['code'];
+
+
+$req="SELECT * FROM etudiant WHERE classe='$code' ";
+
 $reponse = $pdo->query($req);
+
+
 if($reponse->rowCount()>0) {
 	$outputs["etudiants"]=array();
 while ($row = $reponse ->fetch(PDO::FETCH_ASSOC)) {
