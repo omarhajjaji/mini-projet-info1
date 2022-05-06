@@ -73,7 +73,7 @@
   <input type="password" name="pass" id="inputPassword" class="form-control" placeholder="Password" required>
 
   <button class="btn btn-lg btn-primary btn-block" name="valider" type="submit">Se Connecter</button>
-  <br><a href="inscription.html"> Créer un Compte</a>
+  <br><a href="inscription.php"> Créer un Compte</a>
   <p class="mt-5 mb-3 text-muted">&copy; SCO-Enicar 2021-2022</p>
 </form>
   </body>

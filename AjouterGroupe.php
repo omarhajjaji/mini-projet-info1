@@ -1,5 +1,10 @@
 <?php
-//Connexion à la base
+//verif session
+session_start();
+   if($_SESSION["autoriser"]!="oui"){
+      header("location:login.php");
+      exit();
+   }
 
 
   $erreur="";
@@ -9,8 +14,8 @@ if(isset($_POST['ajouter_grp']))
   $niveau= $_POST['niveau'];
   $nb_eleves= $_POST['nb_eleves'];
   $nb_AbsenceJ= $_POST['nb_AbsenceJ'];
+  //connexion à la base 
   $nb_AbsenceNJ= $_POST['nb_AbsenceNJ'];
-  
   include("connexion.php");
 
   $sel=$pdo->prepare("select code from groupe where code=? limit 1");

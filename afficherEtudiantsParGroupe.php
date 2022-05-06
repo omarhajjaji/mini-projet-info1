@@ -1,5 +1,10 @@
 <?php
-
+//verif session
+session_start();
+   if($_SESSION["autoriser"]!="oui"){
+      header("location:login.php");
+      exit();
+   }
 include("connexion.php");
 $erreur ="";
 //Pour avoir la liste (select) des groupes dans la base
