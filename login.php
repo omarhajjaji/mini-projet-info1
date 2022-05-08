@@ -13,6 +13,7 @@
          $_SESSION["prenomNom"]=ucfirst(strtolower($tab[0]["prenom"])).
          " ".strtoupper($tab[0]["nom"]); //Format nom majuscule et prenom minuscule
          $_SESSION["autoriser"]="oui";
+         $_SESSION["email"]=strtolower($tab[0]["login"]);
          header("location:index.php");
       }
       else{

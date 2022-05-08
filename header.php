@@ -26,7 +26,7 @@
           <a class="dropdown-item" href="ajouterEtudiant.php">Ajouter Etudiant</a>
           <a class="dropdown-item" href="chercherEtudiant.php">Chercher Etudiant</a>
           <a class="dropdown-item" href="modifierEtudiant.php">Modifier Etudiant</a>
-          <a class="dropdown-item" href="#">Supprimer Etudiant</a>
+          <a class="dropdown-item" href="SupprimerEtudiant.php">Supprimer Etudiant</a>
 
 
         </div>
@@ -34,8 +34,8 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-expanded="false">Gestion des Absences</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="saisirAbsence.html">Saisir Absence</a>
-          <a class="dropdown-item" href="etatAbsence.html">État des absences pour un groupe</a>
+          <a class="dropdown-item" href="saisirAbsence.php">Saisir Absence</a>
+          <a class="dropdown-item" href="etatAbsence.php">État des absences pour un groupe</a>
         </div>
       </li>
 
